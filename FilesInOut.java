@@ -1,9 +1,4 @@
 import java.io.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-import java.lang.Number;
 
 /**
  * 
@@ -12,7 +7,8 @@ import java.lang.Number;
  */
 public class FilesInOut {
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         // Replace this with statements to set the file name (input) and file name (output).
         // Initially it will be easier to hardcode suitable file names.
 
@@ -27,8 +23,15 @@ public class FilesInOut {
 
         // Finally, add code to read the filenames as arguments from the command line.
 
-        System.out.println("You need to add your own code to do anything");
+        String inputFilePath = "";
+        String outputFilePath = "";
+        File inputFile = new File(inputFilePath);
+        FileProcessor fileProcessor = new FileProcessor(inputFilePath, outputFilePath);
+        fileProcessor.convertDocumentToTitleCase();
+
+
 
     } // main
+
 
 } // FilesInOut
