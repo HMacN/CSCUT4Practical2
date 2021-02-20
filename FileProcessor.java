@@ -53,18 +53,58 @@ public class FileProcessor
     {
         String result = "";
         int pointInStringToStartReadingDate = inputString.length() - 8;
+
         String unformattedName = inputString.substring(0, pointInStringToStartReadingDate);
         String unformattedDate = inputString.substring(pointInStringToStartReadingDate);
-        String formattedDate = "";
-        String formattedName = "";
 
+        String formattedDate = correctlyFormatDate(unformattedDate);
+        String formattedName = nameToTitleCase(unformattedName);
 
-
-
-        result = formattedName + spacesBeforeNextColumn(formattedName.length(), dateColumnOffset) + formattedDate);     //Build correctly formatted output.
+        result = formattedName + spacesBeforeNextColumn(formattedName.length(), dateColumnOffset) + formattedDate;     //Build correctly formatted output.
 
         return result;
     }   //convertStringToTitleCase
+
+
+    /**
+     * Converts given name to title case - capitalises the first letter in each word.
+     *
+     * @param unformattedName : The input name in lower case.
+     * @return : The output name in title case.
+     */
+    private String nameToTitleCase (String unformattedName)
+    {
+        String arrayOfNames[] = unformattedName.split(" ");     //Create an array of names, using " " as a marker for when one name ends and the next one begins.
+        String formattedName = "";
+
+        for (String name : arrayOfNames)
+        {
+            if (name.length() == 1)     //If name only contains one letter:
+            {
+                name = name.toUpperCase();  //Capitalise that one letter.
+            }
+            else if (name.length() > 1)     //If name is longer than one letter:
+            {
+                name  = name.substring(0, 1).toUpperCase() + name.substring(1);     //Capitalise the first letter.
+            }
+
+            formattedName += name;
+        }
+
+        return formattedName;
+    }   //nameToTitleCase
+
+    /**
+     * Converts the given unformatted date to a correctly formatted date by adding "/" characters.
+     * Changes DDMMYYYY to DD/MM/YYYY
+     *
+     * @param inputDate : The input date as a string.
+     * @return : The correctly formatted date.
+     */
+    private String correctlyFormatDate (String inputDate)
+    {
+        return inputDate.substring(0, 1) + "/" + inputDate.substring(2, 3) + "/" + inputDate.substring(4, 8);   //Put a "/" after the 2nd and 4th characters.
+    }   //correctlyFormatDate
 
     /**
      * Generates a string of space characters the correct length to align a second column of text in a file.
