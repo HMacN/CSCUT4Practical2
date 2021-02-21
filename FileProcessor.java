@@ -3,7 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
 
-
 /**
  * Class to handle file processing and part 1 of the assignment.
  */
@@ -77,6 +76,13 @@ public class FileProcessor
         return result;
     }   //convertStringToAppropriateCase
 
+
+    /**
+     * Converts given name to upper case - capitalises the all letters in each word.
+     *
+     * @param unformattedName : The name to be formatted.
+     * @return : The formatted name.
+     */
     private String nameToUpperCase(String unformattedName)
     {
         String arrayOfNames[] = unformattedName.split(" ");     //Create an array of names, using " " as a marker for when one name ends and the next one begins.

@@ -1,12 +1,13 @@
 import java.io.*;
 
 /**
- * 
  * CSCU9T4 Java strings and files exercise.
  *
+ * Code works for part 1 and 2, no separate FormatNamesm program was created.
+ *
  */
-public class FormatNames {
-
+public class FormatNames
+{
     public static void main(String[] args)
     {
         String inputFilePath;
@@ -46,8 +47,7 @@ public class FormatNames {
         FileProcessor fileProcessor = new FileProcessor(inputFilePath, outputFilePath);
         fileProcessor.convertDocumentCase(targetCase);
         fileProcessor.writeToFile();
-
-
+        
     } // main
 
 
