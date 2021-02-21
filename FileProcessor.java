@@ -30,20 +30,20 @@ public class FileProcessor
     }   //Constructor
 
     /**
-     * Creates a file with the names correctly capitalised and the dates correctly formatted.
+     * Populates the output array with the names correctly capitalised and the dates correctly formatted.
      *
+     * @param targetCase : Desired case to convert document names to.
      */
-    public void convertDocumentToTitleCase()
+    public void convertDocumentCase(EnumDesiredCase targetCase)
     {
         int dateColumnOffset = lengthOfLongestString(stringArrayOfInputFileLines);
 
         for (int i = 0; i < linesInFile; i++)
         {
-            stringArrayOfOutputFileLines[i] = convertStringToTitleCase(stringArrayOfInputFileLines[i], dateColumnOffset);
+            stringArrayOfOutputFileLines[i] = convertStringToAppropriateCase(stringArrayOfInputFileLines[i], dateColumnOffset, targetCase);
         }
+    }   //convertDocumentCase
 
-        writeToFile();
-    }   //convertDocumentToTitleCase
 
     /**
      * Converts given strings of names and dates to correctly formatted ones.
@@ -52,7 +52,7 @@ public class FileProcessor
      * @param dateColumnOffset :  The number of characters to write before starting to write the date.
      * @return : The correctly formatted string to return.
      */
-    private String convertStringToTitleCase (String inputString, int dateColumnOffset)
+    private String convertStringToAppropriateCase (String inputString, int dateColumnOffset, EnumDesiredCase targetCase)
     {
         String result = "";
         int pointInStringToStartReadingDate = inputString.length() - 8;
@@ -61,12 +61,43 @@ public class FileProcessor
         String unformattedDate = inputString.substring(pointInStringToStartReadingDate);
 
         String formattedDate = correctlyFormatDate(unformattedDate);
-        String formattedName = nameToTitleCase(unformattedName);
+        String formattedName;
+
+        if (targetCase == EnumDesiredCase.TitleCase)
+        {
+            formattedName = nameToTitleCase(unformattedName);
+        }
+        else
+        {
+            formattedName = nameToUpperCase(unformattedName);
+        }
 
         result = formattedName + spacesBeforeNextColumn(formattedName.length(), dateColumnOffset) + formattedDate;     //Build correctly formatted output.
 
         return result;
-    }   //convertStringToTitleCase
+    }   //convertStringToAppropriateCase
+
+    private String nameToUpperCase(String unformattedName)
+    {
+        String arrayOfNames[] = unformattedName.split(" ");     //Create an array of names, using " " as a marker for when one name ends and the next one begins.
+        String formattedName = "";
+
+        for (String name : arrayOfNames)
+        {
+            if (name.length() == 1)     //If name only contains one letter:
+            {
+                name = name.toUpperCase() + ".";  //Capitalise that one letter, and add a full stop after the initial.
+            }
+            else if (name.length() > 1)     //If name is longer than one letter:
+            {
+                name = name.toUpperCase();     //Capitalise the whole string.
+            }
+
+            formattedName += name + " ";
+        }
+
+        return formattedName;
+    }
 
 
     /**
@@ -84,7 +115,7 @@ public class FileProcessor
         {
             if (name.length() == 1)     //If name only contains one letter:
             {
-                name = name.toUpperCase();  //Capitalise that one letter.
+                name = name.toUpperCase() + ".";  //Capitalise that one letter, and add a full stop after the initial.
             }
             else if (name.length() > 1)     //If name is longer than one letter:
             {
@@ -152,7 +183,7 @@ public class FileProcessor
     /**
      * Writes the array of string outputs to the given file location.
      */
-    private void writeToFile()
+    public void writeToFile()
     {
         //System.out.println("Attempting to print output: " + Arrays.toString(stringArrayOfOutputFileLines));
         //System.out.println("From input: " + Arrays.toString(stringArrayOfInputFileLines));

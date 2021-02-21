@@ -9,6 +9,11 @@ public class FormatNames {
 
     public static void main(String[] args)
     {
+        String inputFilePath;
+        String outputFilePath;
+        EnumDesiredCase targetCase;
+
+
         // Replace this with statements to set the file name (input) and file name (output).
         // Initially it will be easier to hardcode suitable file names.
 
@@ -23,14 +28,24 @@ public class FormatNames {
 
         // Finally, add code to read the filenames as arguments from the command line.
 
-        String inputFilePath = args[0];
-        String outputFilePath = args[1];
+        if (args[0].equals("-u"))
+        {
+            inputFilePath = args[1];
+            outputFilePath = args[2];
+            targetCase = EnumDesiredCase.UpperCase;
+        }
+        else
+        {
+            inputFilePath = args[0];
+            outputFilePath = args[1];
+            targetCase = EnumDesiredCase.TitleCase;
+        }
 
         //System.out.println("Input file: " + args[0] + ", Output File: " + args[1]);
 
         FileProcessor fileProcessor = new FileProcessor(inputFilePath, outputFilePath);
-        fileProcessor.convertDocumentToTitleCase();
-
+        fileProcessor.convertDocumentCase(targetCase);
+        fileProcessor.writeToFile();
 
 
     } // main
