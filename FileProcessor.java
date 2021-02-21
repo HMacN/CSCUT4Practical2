@@ -40,6 +40,8 @@ public class FileProcessor
         {
             stringArrayOfOutputFileLines[i] = convertStringToTitleCase(stringArrayOfInputFileLines[i], dateColumnOffset);
         }
+
+        writeToFile();
     }   //convertDocumentToTitleCase
 
     /**
@@ -127,6 +129,8 @@ public class FileProcessor
 
     /**
      * Returns the integer length of the longest string in the array.
+     *
+     * @param inputStringArray : The array from which the length of the longest entry is required.
      */
     private int lengthOfLongestString (String[] inputStringArray)
     {
@@ -147,17 +151,25 @@ public class FileProcessor
     /**
      * Writes the array of string outputs to the given file location.
      */
-    private void writeToFile() throws FileNotFoundException //Needed for PrintWriter
+    private void writeToFile()
     {
-        PrintWriter writer = new PrintWriter(this.outputFilePath);  //Set up print writer.
+        System.out.println("Attempting to print output: " + Arrays.toString(stringArrayOfOutputFileLines));
 
-
-        for (int i = 0; i < linesInFile; i++)
+        try
         {
-            writer.println(stringArrayOfOutputFileLines[i] + "\n");    //Output each array element to a new line.
-        }
+            PrintWriter writer = new PrintWriter(this.outputFilePath);  //Set up print writer.
 
-        writer.close(); //Make sure PrintWriter is closed before exit.
+            for (int i = 0; i < linesInFile; i++)
+            {
+                writer.println(stringArrayOfOutputFileLines[i] + "\n");    //Output each array element to a new line.
+            }
+
+            writer.close(); //Make sure PrintWriter is closed before exit.
+        }
+        catch (FileNotFoundException fileNotFoundException)
+        {
+            System.out.println("Attempt to write to file failed due to " + fileNotFoundException);
+        }
     }   //writeToFile
 
     /**
