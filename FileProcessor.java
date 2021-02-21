@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -90,7 +91,7 @@ public class FileProcessor
                 name  = name.substring(0, 1).toUpperCase() + name.substring(1);     //Capitalise the first letter.
             }
 
-            formattedName += name;
+            formattedName += name + " ";
         }
 
         return formattedName;
@@ -153,7 +154,8 @@ public class FileProcessor
      */
     private void writeToFile()
     {
-        System.out.println("Attempting to print output: " + Arrays.toString(stringArrayOfOutputFileLines));
+        //System.out.println("Attempting to print output: " + Arrays.toString(stringArrayOfOutputFileLines));
+        //System.out.println("From input: " + Arrays.toString(stringArrayOfInputFileLines));
 
         try
         {
@@ -179,17 +181,26 @@ public class FileProcessor
      */
     private String[] scanTextFileToStringArray()
     {
-        String result[] = new String[this.linesInFile]; //Creates an array with an entry for each line in the given file.
-        Scanner inputFileScanner = new Scanner(this.inputFilePath);
-
-        for (int i = 0; i < result.length; i++)
+        try
         {
-            result[i] = inputFileScanner.nextLine(); //Parse the file into a String array.
-        }
+            String result[] = new String[this.linesInFile]; //Creates an array with an entry for each line in the given file.
+            Scanner inputFileScanner = new Scanner(new File(this.inputFilePath));
 
-        inputFileScanner.close();   //Make sure the scanner is closed.
-        return result;
-    }   //scanTextFIleToStringArray
+            for (int i = 0; i < result.length; i++)
+            {
+                result[i] = inputFileScanner.nextLine(); //Parse the file into a String array.
+            }
+
+            inputFileScanner.close();   //Make sure the scanner is closed.
+            return result;
+        }
+        catch (FileNotFoundException fileNotFoundException)
+        {
+            System.out.println("Cannot scan this file to an array of strings due to: " + fileNotFoundException);
+            String[] defaultStringArray = {""};
+            return defaultStringArray;
+        }
+    }   //scanTextFileToStringArray
 
     /**
      * Gets the number of distinct lines in a given file.
@@ -198,17 +209,25 @@ public class FileProcessor
      */
     private int numbersOfLinesInFile()
     {
-        int result = 0;
-        Scanner inputFileScanner = new Scanner(this.inputFilePath);
-
-        while (inputFileScanner.hasNextLine())  //If there is another line for te scanner to move to:
+        try
         {
-            result++;   //Count a new line.
-            inputFileScanner.nextLine();    //Increment the scanner to the next line.
-        }
+            int result = 0;
+            Scanner inputFileScanner = new Scanner(new File(this.inputFilePath));
 
-        inputFileScanner.close();   //Make sure the scanner is closed.
-        return result;
+            while (inputFileScanner.hasNextLine())  //If there is another line for te scanner to move to:
+            {
+                result++;   //Count a new line.
+                inputFileScanner.nextLine();    //Increment the scanner to the next line.
+            }
+
+            inputFileScanner.close();   //Make sure the scanner is closed.
+            return result;
+        }
+        catch (FileNotFoundException fileNotFoundException)
+        {
+            System.out.println("Cannot count the number of lines in this file due to: " + fileNotFoundException);
+            return 0;
+        }
     }   //numbersOfLinesInAFile
 
 }   //FileProcessor
