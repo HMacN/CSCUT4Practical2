@@ -13,6 +13,7 @@ public class FormatNames
         String inputFilePath;
         String outputFilePath;
         EnumDesiredCase targetCase;
+        InputGetter inputGetter = new InputGetter();
 
 
         // Replace this with statements to set the file name (input) and file name (output).
@@ -29,24 +30,42 @@ public class FormatNames
 
         // Finally, add code to read the filenames as arguments from the command line.
 
-        if (args[0].equals("-u"))
+        //System.out.println("Length of args array: " + args.length);
+
+        if (args.length < 2)   //If the user hasn't passed in any file paths:
         {
-            inputFilePath = args[1];
-            outputFilePath = args[2];
-            targetCase = EnumDesiredCase.UpperCase;
+            inputGetter.captureData();  //Actually capture the input data.
+
+            inputFilePath = inputGetter.getInputFilePath();     //Get data from the inputGetter object.
+            outputFilePath = inputGetter.getOutputFilePath();
+            targetCase = inputGetter.getDesiredCase();
         }
-        else
+        else    //If the user has passed in enough arguments:
         {
-            inputFilePath = args[0];
-            outputFilePath = args[1];
-            targetCase = EnumDesiredCase.TitleCase;
+            if (args[0].equals("-u"))  //Check for uppercase flag.
+            {
+                inputFilePath = args[1];
+                outputFilePath = args[2];
+                targetCase = EnumDesiredCase.UpperCase;
+            }
+            else
+            {
+                inputFilePath = args[0];
+                outputFilePath = args[1];
+                targetCase = EnumDesiredCase.TitleCase;
+            }
         }
+
+
 
         //System.out.println("Input file: " + args[0] + ", Output File: " + args[1]);
 
-        FileProcessor fileProcessor = new FileProcessor(inputFilePath, outputFilePath);
-        fileProcessor.convertDocumentCase(targetCase);
-        fileProcessor.writeToFile();
+        if (inputGetter.getIfUserWantsToContinue())  //If the user wants to continue.
+        {
+            FileProcessor fileProcessor = new FileProcessor(inputFilePath, outputFilePath);
+            fileProcessor.convertDocumentCase(targetCase);
+            fileProcessor.writeToFile();
+        }
         
     } // main
 
